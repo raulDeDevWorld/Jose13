@@ -18,16 +18,40 @@ export default function Home() {
     const router = useRouter()
     const [query, setQuery] = useState('')
     const [data, setData] = useState({})
+    const [data2, setData2] = useState({})
 
     function handlerOnChange(e, key) {
         setData({ ...data, [e.target.name]: e.target.value })
     }
+
+
+
+      // -------------------------------------------
+    function handlerLess2() {
+        let db = { ...data2 };
+        delete db[`item${data2 !== undefined && Object.keys(data2).length - 1}`];
+        return setData2(db)
+    }
+    
+    function onChangeHandler2(e, index) {
+        setData2({ ...data2, [`item${index}`]: { ...data2[`item${index}`], [e.target.name]: e.target.value } })
+    }
+    function saveEspecificaciones(e) {
+        e.preventDefault()
+        setUserSuccess('Cargando')
+        writeUserData(`/Cliente/${query}/tarjetas/${route}/especificaciones`, data2, setUserSuccess)
+    }
+
+
+
+
     function saveFrontPage(e, route) {
         e.preventDefault()
         let key = generateUUID()
         setUserSuccess('Cargando')
         writeUserData(`${route}/${key}`, data, setUserSuccess)
     }
+
     function close(e) {
         router.back()
     }
@@ -61,6 +85,9 @@ export default function Home() {
                             </div>
                         </div>
                     </form>}
+
+
+
                     {(query === 'FCL') && <form className="relative  pt-5 sm:col-span-3 mb-5 pb-5  "  >
                         <div className='relative p-5 my-5 mt-10 bg-white space-y-5'>
                             <h5 className='text-center font-medium text-[16px]'>Añadir {query}<br /> </h5>
@@ -70,10 +97,6 @@ export default function Home() {
                             < InputFlotante type="number" id="floating_5" onChange={(e) => handlerOnChange(e,)} defaultValue={data['EQUIPO']} required label={'EQUIPO'} shadow='shadow-white' />
                             < InputFlotante type="text" id="floating_5" onChange={(e) => handlerOnChange(e,)} defaultValue={data['TT']} required label={'TT'} shadow='shadow-white' />
                             < InputFlotante type="text" id="floating_5" onChange={(e) => handlerOnChange(e,)} defaultValue={data['VALIDEZ']} required label={'VALIDEZ'} shadow='shadow-white' />
-
-
-
-
 
 
 
@@ -98,7 +121,6 @@ export default function Home() {
                                     </div>
                                 })
                                 }
-
 
 
                                 <div className="mt-6 flex items-center justify-center gap-x-6">
